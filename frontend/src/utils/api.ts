@@ -3,8 +3,12 @@
  * Connects frontend to the Express + MongoDB Atlas backend
  */
 
-// Use VITE_API_URL from environment or fallback to relative /api (proxied in Vite dev server)
-export const API_BASE_URL = ((import.meta as any).env?.VITE_API_URL as string) || '/api';
+const defaultUrl = (import.meta as any).env?.DEV 
+  ? 'http://localhost:5000/api' 
+  : 'https://student-study-planner-n86z.onrender.com/api';
+
+// Use VITE_API_URL if configured, otherwise fallback to live Render backend
+export const API_BASE_URL = ((import.meta as any).env?.VITE_API_URL as string) || defaultUrl;
 
 function getAuthHeader(): Record<string, string> {
   const token = localStorage.getItem('ssp_jwt_token');
