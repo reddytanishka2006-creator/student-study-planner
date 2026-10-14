@@ -15,12 +15,31 @@ function getAuthHeader(): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+async function parseResponse(res: Response): Promise<{ ok: boolean; status: number; data: any }> {
+  try {
+    const text = await res.text();
+    try {
+      const data = JSON.parse(text);
+      return { ok: res.ok, status: res.status, data };
+    } catch {
+      return { 
+        ok: false, 
+        status: res.status, 
+        data: { error: res.status === 404 ? 'Backend API endpoint not found. Please verify backend URL.' : 'Backend returned an invalid response.' } 
+      };
+    }
+  } catch {
+    return { ok: false, status: res.status, data: { error: 'Failed to communicate with server.' } };
+  }
+}
+
 export const api = {
   async checkHealth(): Promise<{ status: string; database?: string } | null> {
     try {
       const res = await fetch(`${API_BASE_URL}/health`);
       if (!res.ok) return null;
-      return await res.json();
+      const { data } = await parseResponse(res);
+      return data;
     } catch {
       return null;
     }
@@ -33,14 +52,14 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        return { success: false, error: data.error || 'Login failed' };
+      const { ok, data } = await parseResponse(res);
+      if (!ok) {
+        return { success: false, error: data?.error || 'Login failed' };
       }
-      if (data.token) {
+      if (data?.token) {
         localStorage.setItem('ssp_jwt_token', data.token);
       }
-      return { success: true, user: data.user, token: data.token };
+      return { success: true, user: data?.user, token: data?.token };
     } catch (err: any) {
       return { success: false, error: err.message || 'Cannot reach backend server' };
     }
@@ -53,14 +72,14 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        return { success: false, error: data.error || 'Registration failed' };
+      const { ok, data } = await parseResponse(res);
+      if (!ok) {
+        return { success: false, error: data?.error || 'Registration failed' };
       }
-      if (data.token) {
+      if (data?.token) {
         localStorage.setItem('ssp_jwt_token', data.token);
       }
-      return { success: true, user: data.user, token: data.token };
+      return { success: true, user: data?.user, token: data?.token };
     } catch (err: any) {
       return { success: false, error: err.message || 'Cannot reach backend server' };
     }
@@ -73,14 +92,14 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, newPassword }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        return { success: false, error: data.error || 'Failed to reset password' };
+      const { ok, data } = await parseResponse(res);
+      if (!ok) {
+        return { success: false, error: data?.error || 'Failed to reset password' };
       }
-      if (data.token) {
+      if (data?.token) {
         localStorage.setItem('ssp_jwt_token', data.token);
       }
-      return { success: true, user: data.user };
+      return { success: true, user: data?.user };
     } catch (err: any) {
       return { success: false, error: err.message || 'Cannot reach backend server' };
     }
@@ -94,12 +113,13 @@ export const api = {
         },
       });
       if (!res.ok) return null;
-      const json = await res.json();
-      return json.data || null;
+      const { data } = await parseResponse(res);
+      return data?.data || null;
     } catch {
       return null;
     }
   },
+
 
   async saveUserData(userId: string, data: any) {
     try {
