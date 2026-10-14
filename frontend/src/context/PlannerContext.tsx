@@ -149,7 +149,7 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch (e) {
       console.error(e);
     }
-    return SEEDED_USER.id; // default to demo student
+    return null; // Show Landing Page by default
   });
 
   // Current logged in user object
@@ -160,9 +160,17 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // 3. User Data State (Subjects, Units, Topics, Tasks, Exams)
   const [data, setData] = useState<UserData>(() => {
-    const userId = currentUserId || SEEDED_USER.id;
+    if (!currentUserId) {
+      return {
+        subjects: [],
+        units: [],
+        topics: [],
+        tasks: [],
+        exams: []
+      };
+    }
     try {
-      const storedData = localStorage.getItem(`ssp_data_${userId}`);
+      const storedData = localStorage.getItem(`ssp_data_${currentUserId}`);
       if (storedData) {
         return JSON.parse(storedData);
       }
