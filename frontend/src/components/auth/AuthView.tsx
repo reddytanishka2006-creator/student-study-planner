@@ -24,8 +24,9 @@ export const AuthView: React.FC = () => {
   // Messages
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
@@ -33,13 +34,18 @@ export const AuthView: React.FC = () => {
       setErrorMsg('Please enter both email and password.');
       return;
     }
-    const res = login(loginEmail, loginPassword);
-    if (!res.success) {
-      setErrorMsg(res.error || 'Failed to log in.');
+    setIsLoading(true);
+    try {
+      const res = await login(loginEmail, loginPassword);
+      if (!res.success) {
+        setErrorMsg(res.error || 'Failed to log in.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
@@ -61,13 +67,18 @@ export const AuthView: React.FC = () => {
       return;
     }
 
-    const res = register(signupName, signupEmail, signupPassword);
-    if (!res.success) {
-      setErrorMsg(res.error || 'Failed to create account.');
+    setIsLoading(true);
+    try {
+      const res = await register(signupName, signupEmail, signupPassword);
+      if (!res.success) {
+        setErrorMsg(res.error || 'Failed to create account.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleForgotPassword = (e: React.FormEvent) => {
+  const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
@@ -85,17 +96,22 @@ export const AuthView: React.FC = () => {
       return;
     }
 
-    const res = forgotPassword(forgotEmail, forgotNewPassword);
-    if (res.success) {
-      setSuccessMsg('Password updated successfully! You can now log in.');
-      setTimeout(() => {
-        setTab('login');
-        setLoginEmail(forgotEmail);
-        setLoginPassword(forgotNewPassword);
-        setSuccessMsg('');
-      }, 1500);
-    } else {
-      setErrorMsg(res.error || 'Failed to reset password.');
+    setIsLoading(true);
+    try {
+      const res = await forgotPassword(forgotEmail, forgotNewPassword);
+      if (res.success) {
+        setSuccessMsg('Password updated successfully! You can now log in.');
+        setTimeout(() => {
+          setTab('login');
+          setLoginEmail(forgotEmail);
+          setLoginPassword(forgotNewPassword);
+          setSuccessMsg('');
+        }, 1500);
+      } else {
+        setErrorMsg(res.error || 'Failed to update password.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 

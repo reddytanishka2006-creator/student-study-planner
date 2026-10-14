@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PlannerProvider, usePlanner } from './context/PlannerContext';
-import { AuthView } from './components/auth/AuthView';
+import { LandingPageView } from './components/landing/LandingPageView';
 import { Navbar } from './components/common/Navbar';
 import { Sidebar } from './components/common/Sidebar';
 import { DashboardView } from './components/dashboard/DashboardView';
@@ -43,9 +43,9 @@ const AppContent: React.FC = () => {
   const [presetTopicId, setPresetTopicId] = useState<string | undefined>();
   const [presetTopicName, setPresetTopicName] = useState<string | undefined>();
 
-  // If user is not authenticated, render AuthView (Sign In / Sign Up / Forgot Password)
+  // If user is not authenticated, render the Landing Page with Sign In & Sign Up
   if (!isAuthenticated || !currentUser) {
-    return <AuthView />;
+    return <LandingPageView />;
   }
 
   const handleOpenQuickAdd = (type: 'subject' | 'task' | 'exam') => {

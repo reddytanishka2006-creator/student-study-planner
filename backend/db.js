@@ -391,7 +391,7 @@ export const db = {
 
   async updateUser(id, updates) {
     if (isMongoConnected) {
-      return await UserModel.findOneAndUpdate({ id }, { $set: updates }, { new: true }).lean();
+      return await UserModel.findOneAndUpdate({ id }, { $set: updates }, { returnDocument: 'after' }).lean();
     }
     const current = loadLocalDb();
     const idx = current.users.findIndex(u => u.id === id);
@@ -451,7 +451,7 @@ export const db = {
             exams: data.exams || []
           } 
         },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: 'after' }
       );
       return true;
     }
@@ -475,7 +475,7 @@ export const db = {
       await UserDataModel.findOneAndUpdate(
         { userId },
         { $set: initial },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: 'after' }
       );
       return initial;
     }

@@ -6,6 +6,7 @@ import {
 } from '../types';
 import { SEEDED_USER, getInitialSeedData } from '../data/seedData';
 import { getDaysRemaining, isDateToday, parseDate, getTodayDateString } from '../utils/dateUtils';
+import { api } from '../utils/api';
 
 interface UserData {
   subjects: Subject[];
@@ -27,10 +28,10 @@ interface PlannerContextType {
   // Auth state
   currentUser: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => { success: boolean; error?: string };
-  register: (name: string, email: string, password: string) => { success: boolean; error?: string };
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
-  forgotPassword: (email: string, newPassword: string) => { success: boolean; error?: string };
+  forgotPassword: (email: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   updateProfile: (updated: Partial<User>) => void;
   loginAsDemo: () => void;
 
@@ -179,7 +180,6 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (storedData) {
         setData(JSON.parse(storedData));
       } else {
-        // If it's a new empty user, start fresh or seeded
         const initial = currentUserId === SEEDED_USER.id ? getInitialSeedData() : {
           subjects: [],
           units: [],
@@ -193,6 +193,14 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch (e) {
       console.error(e);
     }
+
+    // Also fetch latest synced state from MongoDB Atlas backend
+    api.getUserData(currentUserId).then(remoteData => {
+      if (remoteData && Array.isArray(remoteData.subjects)) {
+        setData(remoteData);
+        localStorage.setItem(`ssp_data_${currentUserId}`, JSON.stringify(remoteData));
+      }
+    }).catch(err => console.warn('Backend sync notice:', err));
   }, [currentUserId]);
 
   // Save current user data whenever it changes
@@ -203,6 +211,13 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
       } catch (e) {
         console.error(e);
       }
+
+      // Debounced background sync to backend
+      const timer = setTimeout(() => {
+        api.saveUserData(currentUserId, data).catch(() => {});
+      }, 500);
+
+      return () => clearTimeout(timer);
     }
   }, [currentUserId, data]);
 
@@ -668,8 +683,26 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   // Auth Functions
-  const login = useCallback((email: string, pass: string) => {
-    const found = users.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
+  const login = useCallback(async (email: string, pass: string) => {
+    const trimmedEmail = email.toLowerCase().trim();
+
+    // 1. Attempt backend login first
+    try {
+      const apiRes = await api.login(trimmedEmail, pass);
+      if (apiRes.success && apiRes.user) {
+        setUsers(prev => {
+          const exists = prev.some(u => u.id === apiRes.user.id);
+          return exists ? prev.map(u => u.id === apiRes.user.id ? { ...u, ...apiRes.user } : u) : [...prev, apiRes.user];
+        });
+        setCurrentUserId(apiRes.user.id);
+        return { success: true };
+      }
+    } catch {
+      // Ignore network errors and try local fallback
+    }
+
+    // 2. Fallback to local users list
+    const found = users.find(u => u.email.toLowerCase() === trimmedEmail);
     if (!found) {
       return { success: false, error: 'No account found with this email address.' };
     }
@@ -680,8 +713,33 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return { success: true };
   }, [users]);
 
-  const register = useCallback((name: string, email: string, pass: string) => {
+  const register = useCallback(async (name: string, email: string, pass: string) => {
     const trimmedEmail = email.toLowerCase().trim();
+
+    // 1. Attempt backend registration
+    try {
+      const apiRes = await api.register(name, trimmedEmail, pass);
+      if (apiRes.success && apiRes.user) {
+        setUsers(prev => [...prev.filter(u => u.id !== apiRes.user.id), apiRes.user]);
+        setCurrentUserId(apiRes.user.id);
+
+        const starterSeed = getInitialSeedData();
+        setData(starterSeed);
+        try {
+          localStorage.setItem(`ssp_data_${apiRes.user.id}`, JSON.stringify(starterSeed));
+        } catch (e) {
+          console.error(e);
+        }
+        api.saveUserData(apiRes.user.id, starterSeed).catch(() => {});
+        return { success: true };
+      } else if (apiRes.error) {
+        return { success: false, error: apiRes.error };
+      }
+    } catch {
+      // Fallback to local registration if offline
+    }
+
+    // 2. Fallback local registration
     if (users.some(u => u.email.toLowerCase() === trimmedEmail)) {
       return { success: false, error: 'An account with this email already exists.' };
     }
@@ -702,7 +760,6 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setUsers(prev => [...prev, newUser]);
     setCurrentUserId(newUser.id);
     
-    // Seed new user with a clean starter template so they're not staring at a totally blank screen
     const starterSeed = getInitialSeedData();
     setData(starterSeed);
     try {
@@ -715,11 +772,25 @@ export const PlannerProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [users]);
 
   const logout = useCallback(() => {
+    api.logout();
     setCurrentUserId(null);
   }, []);
 
-  const forgotPassword = useCallback((email: string, newPass: string) => {
+  const forgotPassword = useCallback(async (email: string, newPass: string) => {
     const trimmedEmail = email.toLowerCase().trim();
+
+    // 1. Try backend
+    try {
+      const apiRes = await api.forgotPassword(trimmedEmail, newPass);
+      if (apiRes.success && apiRes.user) {
+        setUsers(prev => prev.map(u => u.id === apiRes.user.id ? { ...u, password: newPass } : u));
+        return { success: true };
+      }
+    } catch {
+      // Fallback to local
+    }
+
+    // 2. Local fallback
     const userIndex = users.findIndex(u => u.email.toLowerCase() === trimmedEmail);
     if (userIndex === -1) {
       return { success: false, error: 'No student registered with that email address.' };

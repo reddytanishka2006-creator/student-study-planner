@@ -10,12 +10,20 @@ export function getTodayDateString(): string {
   return `${year}-${month}-${day}`;
 }
 
-export function parseDate(dateStr: string): Date {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  return new Date(year, month - 1, day);
+export function parseDate(dateStr?: string | null): Date {
+  if (!dateStr || typeof dateStr !== 'string') {
+    return new Date();
+  }
+  const cleanStr = dateStr.split('T')[0];
+  const parts = cleanStr.split('-').map(Number);
+  if (parts.length >= 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+  }
+  const parsed = new Date(dateStr);
+  return isNaN(parsed.getTime()) ? new Date() : parsed;
 }
 
-export function formatDate(dateStr: string, options?: { month?: 'short' | 'long' | 'numeric', includeYear?: boolean }): string {
+export function formatDate(dateStr?: string | null, options?: { month?: 'short' | 'long' | 'numeric', includeYear?: boolean }): string {
   if (!dateStr) return '';
   const d = parseDate(dateStr);
   const month = options?.month || 'short';
@@ -35,13 +43,23 @@ export function formatDate(dateStr: string, options?: { month?: 'short' | 'long'
   return `${day} ${m}`;
 }
 
-export function getDaysRemaining(targetDateStr: string): {
+export function getDaysRemaining(targetDateStr?: string | null): {
   days: number;
   label: string;
   isPast: boolean;
   isToday: boolean;
   isTomorrow: boolean;
 } {
+  if (!targetDateStr) {
+    return {
+      days: 0,
+      label: 'Date not set',
+      isPast: false,
+      isToday: false,
+      isTomorrow: false,
+    };
+  }
+
   const todayStr = getTodayDateString();
   const today = parseDate(todayStr);
   const target = parseDate(targetDateStr);
