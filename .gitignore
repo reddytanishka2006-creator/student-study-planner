@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Production build artifacts
+dist/
+**/dist/
+
+# Environment variables & secrets (CRITICAL: Do not commit credentials)
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+**/!.env.example
+
+# Logs and system files
+*.log
+**/*.log
+.DS_Store
+Thumbs.db
+
+# Vite / IDE cache
+.vite/
+.vscode/
+.idea/

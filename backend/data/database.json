@@ -1,0 +1,400 @@
+{
+  "users": [
+    {
+      "id": "user_tanishka_01",
+      "name": "Tanishka Sharma",
+      "email": "tanishka@study.edu",
+      "password": "password123",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250",
+      "major": "Computer Science & Engineering",
+      "semester": "5th Semester",
+      "targetGpa": "9.4 / 10.0",
+      "studyGoalHoursPerWeek": 28,
+      "bio": "CS sophomore passionate about systems programming, distributed systems, and preparing for upcoming semester finals and coding interviews.",
+      "createdAt": "2026-08-01"
+    }
+  ],
+  "userData": {
+    "user_tanishka_01": {
+      "subjects": [
+        {
+          "id": "sub_os",
+          "name": "Operating Systems",
+          "code": "CS301",
+          "description": "Core concepts of process scheduling, virtual memory, threads, synchronization, and file management.",
+          "color": "#4f46e5",
+          "icon": "cpu",
+          "examDate": "2026-10-19",
+          "targetScore": 92,
+          "createdAt": "2026-08-15"
+        },
+        {
+          "id": "sub_dbms",
+          "name": "Database Management Systems",
+          "code": "CS302",
+          "description": "Relational algebra, SQL queries, ER modeling, normalization forms, and ACID transaction recovery.",
+          "color": "#0284c7",
+          "icon": "database",
+          "examDate": "2026-10-27",
+          "targetScore": 95,
+          "createdAt": "2026-08-15"
+        },
+        {
+          "id": "sub_cn",
+          "name": "Computer Networks",
+          "code": "CS303",
+          "description": "OSI & TCP/IP stack, routing protocols, flow & congestion control, socket programming, and network security.",
+          "color": "#059669",
+          "icon": "network",
+          "examDate": "2026-11-01",
+          "targetScore": 90,
+          "createdAt": "2026-08-15"
+        },
+        {
+          "id": "sub_daa",
+          "name": "Design & Analysis of Algorithms",
+          "code": "CS304",
+          "description": "Asymptotic notation, Divide-and-Conquer, Dynamic Programming, Greedy approaches, and NP-completeness.",
+          "color": "#d97706",
+          "icon": "code",
+          "examDate": "2026-11-08",
+          "targetScore": 88,
+          "createdAt": "2026-08-15"
+        },
+        {
+          "id": "sub_se",
+          "name": "Software Engineering & DevOps",
+          "code": "CS305",
+          "description": "Agile methodologies, CI/CD pipelines, Docker containerization, microservices architecture, and testing.",
+          "color": "#e11d48",
+          "icon": "layers",
+          "examDate": "2026-11-15",
+          "targetScore": 94,
+          "createdAt": "2026-08-15"
+        }
+      ],
+      "units": [
+        {
+          "id": "unit_os_1",
+          "subjectId": "sub_os",
+          "title": "Unit 1: Introduction to Operating Systems & System Calls",
+          "order": 1
+        },
+        {
+          "id": "unit_os_2",
+          "subjectId": "sub_os",
+          "title": "Unit 2: Process Management & CPU Scheduling",
+          "order": 2
+        },
+        {
+          "id": "unit_os_3",
+          "subjectId": "sub_os",
+          "title": "Unit 3: Inter-Process Communication & Synchronization",
+          "order": 3
+        },
+        {
+          "id": "unit_os_4",
+          "subjectId": "sub_os",
+          "title": "Unit 4: Deadlocks & Handling Strategies",
+          "order": 4
+        },
+        {
+          "id": "unit_os_5",
+          "subjectId": "sub_os",
+          "title": "Unit 5: Memory Management & Virtual Memory",
+          "order": 5
+        },
+        {
+          "id": "unit_dbms_1",
+          "subjectId": "sub_dbms",
+          "title": "Unit 1: Database Architecture & ER Model",
+          "order": 1
+        },
+        {
+          "id": "unit_dbms_2",
+          "subjectId": "sub_dbms",
+          "title": "Unit 2: Relational Model & SQL Operations",
+          "order": 2
+        },
+        {
+          "id": "unit_dbms_3",
+          "subjectId": "sub_dbms",
+          "title": "Unit 3: Relational Database Design & Normalization",
+          "order": 3
+        },
+        {
+          "id": "unit_dbms_4",
+          "subjectId": "sub_dbms",
+          "title": "Unit 4: Transaction Processing & Concurrency Control",
+          "order": 4
+        },
+        {
+          "id": "unit_cn_1",
+          "subjectId": "sub_cn",
+          "title": "Unit 1: Network Architectures & Physical/Data Link Layer",
+          "order": 1
+        },
+        {
+          "id": "unit_cn_2",
+          "subjectId": "sub_cn",
+          "title": "Unit 2: Network Layer & IP Addressing",
+          "order": 2
+        },
+        {
+          "id": "unit_cn_3",
+          "subjectId": "sub_cn",
+          "title": "Unit 3: Transport Layer & TCP Flow Control",
+          "order": 3
+        },
+        {
+          "id": "unit_daa_1",
+          "subjectId": "sub_daa",
+          "title": "Unit 1: Mathematical Foundations & Divide and Conquer",
+          "order": 1
+        },
+        {
+          "id": "unit_daa_2",
+          "subjectId": "sub_daa",
+          "title": "Unit 2: Greedy Algorithms & Dynamic Programming",
+          "order": 2
+        },
+        {
+          "id": "unit_se_1",
+          "subjectId": "sub_se",
+          "title": "Unit 1: Software Development Life Cycle & Agile",
+          "order": 1
+        },
+        {
+          "id": "unit_se_2",
+          "subjectId": "sub_se",
+          "title": "Unit 2: Software Design Patterns & Architecture",
+          "order": 2
+        }
+      ],
+      "topics": [
+        {
+          "id": "top_os_1_1",
+          "unitId": "unit_os_1",
+          "subjectId": "sub_os",
+          "title": "Dual-mode operation & Kernel vs User Mode",
+          "priority": "High",
+          "status": "Completed",
+          "estimatedHours": 2,
+          "completedAt": "2026-10-12"
+        },
+        {
+          "id": "top_os_1_2",
+          "unitId": "unit_os_1",
+          "subjectId": "sub_os",
+          "title": "System calls (fork, exec, wait, exit)",
+          "priority": "High",
+          "status": "Completed",
+          "estimatedHours": 3,
+          "completedAt": "2026-10-12"
+        },
+        {
+          "id": "top_os_2_1",
+          "unitId": "unit_os_2",
+          "subjectId": "sub_os",
+          "title": "Process Control Block (PCB) & Context Switching",
+          "priority": "Medium",
+          "status": "Completed",
+          "estimatedHours": 2.5,
+          "completedAt": "2026-10-13"
+        },
+        {
+          "id": "top_os_2_2",
+          "unitId": "unit_os_2",
+          "subjectId": "sub_os",
+          "title": "Scheduling Algorithms: FCFS, SJF, Round Robin",
+          "priority": "High",
+          "status": "Completed",
+          "estimatedHours": 4,
+          "completedAt": "2026-10-13"
+        },
+        {
+          "id": "top_os_3_1",
+          "unitId": "unit_os_3",
+          "subjectId": "sub_os",
+          "title": "Critical Section Problem & Race Conditions",
+          "priority": "High",
+          "status": "In Progress",
+          "estimatedHours": 3
+        },
+        {
+          "id": "top_os_3_2",
+          "unitId": "unit_os_3",
+          "subjectId": "sub_os",
+          "title": "Semaphores, Mutex Locks & Monitors",
+          "priority": "High",
+          "status": "In Progress",
+          "estimatedHours": 3.5
+        },
+        {
+          "id": "top_os_4_1",
+          "unitId": "unit_os_4",
+          "subjectId": "sub_os",
+          "title": "Deadlock Characterization & Banker Algorithm",
+          "priority": "High",
+          "status": "Not Started",
+          "estimatedHours": 4
+        },
+        {
+          "id": "top_os_5_1",
+          "unitId": "unit_os_5",
+          "subjectId": "sub_os",
+          "title": "Paging, Segmentation & TLB",
+          "priority": "High",
+          "status": "Not Started",
+          "estimatedHours": 4.5
+        },
+        {
+          "id": "top_db_1_1",
+          "unitId": "unit_dbms_1",
+          "subjectId": "sub_dbms",
+          "title": "Three-schema architecture & Data Independence",
+          "priority": "Medium",
+          "status": "Completed",
+          "estimatedHours": 2
+        },
+        {
+          "id": "top_db_2_1",
+          "unitId": "unit_dbms_2",
+          "subjectId": "sub_dbms",
+          "title": "Complex SQL: Subqueries, Joins & Group By",
+          "priority": "High",
+          "status": "In Progress",
+          "estimatedHours": 3.5
+        },
+        {
+          "id": "top_db_3_1",
+          "unitId": "unit_dbms_3",
+          "subjectId": "sub_dbms",
+          "title": "Functional Dependencies & Normal Forms (1NF, 2NF, 3NF, BCNF)",
+          "priority": "High",
+          "status": "In Progress",
+          "estimatedHours": 4.5
+        },
+        {
+          "id": "top_cn_1_1",
+          "unitId": "unit_cn_1",
+          "subjectId": "sub_cn",
+          "title": "OSI vs TCP/IP reference models",
+          "priority": "Medium",
+          "status": "Completed",
+          "estimatedHours": 2
+        },
+        {
+          "id": "top_daa_1_1",
+          "unitId": "unit_daa_1",
+          "subjectId": "sub_daa",
+          "title": "Master Theorem for Recurrence Relations",
+          "priority": "High",
+          "status": "Completed",
+          "estimatedHours": 3
+        },
+        {
+          "id": "top_se_1_1",
+          "unitId": "unit_se_1",
+          "subjectId": "sub_se",
+          "title": "Agile Scrum Ceremonies & User Stories",
+          "priority": "Medium",
+          "status": "Completed",
+          "estimatedHours": 2
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task_01",
+          "title": "Practice Banker Algorithm Numerical Problems",
+          "description": "Solve 5 previous year university exam questions on resource allocation graphs and safe sequence determination.",
+          "subjectId": "sub_os",
+          "unitId": "unit_os_4",
+          "topicId": "top_os_4_1",
+          "date": "2026-10-14",
+          "startTime": "10:00",
+          "endTime": "12:00",
+          "priority": "High",
+          "status": "Pending",
+          "createdAt": "2026-10-12"
+        },
+        {
+          "id": "task_02",
+          "title": "Revise SQL Joins & Nested Queries Sheet",
+          "description": "Complete hands-on database lab exercises focusing on correlated subqueries and aggregate functions.",
+          "subjectId": "sub_dbms",
+          "unitId": "unit_dbms_2",
+          "topicId": "top_db_2_1",
+          "date": "2026-10-14",
+          "startTime": "14:30",
+          "endTime": "16:00",
+          "priority": "High",
+          "status": "Pending",
+          "createdAt": "2026-10-13"
+        },
+        {
+          "id": "task_03",
+          "title": "Operating Systems: Semaphores & Mutex Implementation",
+          "description": "Review classic synchronization problems: Producer-Consumer and Dining Philosophers in C.",
+          "subjectId": "sub_os",
+          "unitId": "unit_os_3",
+          "topicId": "top_os_3_2",
+          "date": "2026-10-14",
+          "startTime": "17:00",
+          "endTime": "18:30",
+          "priority": "Medium",
+          "status": "Completed",
+          "createdAt": "2026-10-14"
+        },
+        {
+          "id": "task_04",
+          "title": "Computer Networks: Subnetting & CIDR Calculation",
+          "description": "Solve VLSM subnetting tables and assign IP ranges for a mock campus network topology.",
+          "subjectId": "sub_cn",
+          "unitId": "unit_cn_2",
+          "date": "2026-10-15",
+          "startTime": "09:30",
+          "endTime": "11:30",
+          "priority": "High",
+          "status": "Pending",
+          "createdAt": "2026-10-13"
+        }
+      ],
+      "exams": [
+        {
+          "id": "exam_os",
+          "subjectId": "sub_os",
+          "title": "Operating Systems Theory Midterm",
+          "examDate": "2026-10-19",
+          "startTime": "09:30",
+          "durationMinutes": 180,
+          "venue": "Auditorium Hall B - Desk 42",
+          "targetScore": 92,
+          "notes": "Focus on CPU Scheduling, Deadlocks (Banker Algorithm), and Paging / Segmentation questions."
+        },
+        {
+          "id": "exam_dbms",
+          "subjectId": "sub_dbms",
+          "title": "Database Management Systems Semester Exam",
+          "examDate": "2026-10-27",
+          "startTime": "14:00",
+          "durationMinutes": 180,
+          "venue": "Computing Complex - Lab 4",
+          "targetScore": 95,
+          "notes": "Thoroughly revise 3NF vs BCNF proofs, B+ tree index insertions, and ACID serializability checks."
+        },
+        {
+          "id": "exam_cn",
+          "subjectId": "sub_cn",
+          "title": "Computer Networks Final Assessment",
+          "examDate": "2026-11-01",
+          "startTime": "10:00",
+          "durationMinutes": 120,
+          "venue": "Engineering Block 3 - Hall 102",
+          "targetScore": 90,
+          "notes": "TCP 3-way handshake sequence diagram and subnetting calculations carry high weightage."
+        }
+      ]
+    }
+  }
+}
